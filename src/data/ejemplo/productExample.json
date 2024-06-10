@@ -1,0 +1,10 @@
+{
+  "title": "Smartphone Galaxy S21",
+  "description": "El último smartphone de Samsung con pantalla AMOLED y cámara de alta resolución.",
+  "price": 799.99,
+  "img": "galaxy.com",
+  "code": 1223,
+  "stock": 8,
+  "status": true,
+  "category": "electronica"
+}
