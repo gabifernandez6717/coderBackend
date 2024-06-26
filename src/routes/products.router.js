@@ -48,8 +48,7 @@ async function editedProduct (id, dataProduct){
 //Eliminar producto por su id
 async function deleteProductById(id){
     try {
-        const response = productManager.deleteProductById(id)
-        console.log(response)
+        const response = await productManager.deleteProductById(id)
         return response
     } catch (error) {
         console.error(error);
@@ -132,4 +131,4 @@ router.delete("/:id", (req, res) => {
     }
 })
 
-module.exports = router
+module.exports = {router, getProducts, getProductsById, addProduct, editedProduct, deleteProductById}
