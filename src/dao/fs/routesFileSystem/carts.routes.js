@@ -1,10 +1,9 @@
+
 const Router = require('express')
 const router = Router()
 const CartManager = require('../managers/cartManager')
 const cartManager = new CartManager("src/data/carts.json")
-
 //Funciones para capturar algun error
-
 //Crear un cart
 async function createCart () {
     try {
@@ -41,9 +40,7 @@ async function deleteCart (id) {
         console.log(error);
     }
 }
-
 //Rutas
-
 //Crear un cart
 //http://localhost:8080/api/carts/
 router.post('/', async (req, res)=>{
@@ -80,7 +77,6 @@ router.post('/:cid/product/:pid', async (req, res)=>{
         res.status(401).send("Hubo un error al agregar el producto al cart")
     }
 })
-
 //Eliminar un cart por su id
 //http://localhost:8080/api/carts/:cid/
 router.delete('/:cid', async (req, res)=>{
@@ -93,5 +89,4 @@ router.delete('/:cid', async (req, res)=>{
         res.status(401).send("Hubo un error al eliminar el cart")
     }
 })
-
 module.exports = router

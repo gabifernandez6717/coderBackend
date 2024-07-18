@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Smartphone Galaxy S28",
+    "description": "El último smartphone de Samsung con pantalla AMOLED y cámara de alta resolución.",
+    "price": 899.99,
+    "img": "https://example.com/galaxy-s28.jpg",
+    "code": 1223,
+    "stock": 8,
+    "estado": true,
+    "category": "electronica"
+  },
+  {
+    "title": "Laptop MacBook Pro 16\"",
+    "description": "Potente laptop de Apple con chip M1 y pantalla Retina.",
+    "price": 2399.99,
+    "img": "https://example.com/macbook-pro.jpg",
+    "code": 1224,
+    "stock": 5,
+    "estado": true,
+    "category": "computacion"
+  },
+  {
+    "title": "Auriculares Sony WH-1000XM4",
+    "description": "Auriculares inalámbricos con cancelación de ruido.",
+    "price": 349.99,
+    "img": "https://example.com/sony-wh1000xm4.jpg",
+    "code": 1225,
+    "stock": 15,
+    "estado": true,
+    "category": "audio"
+  },
+  {
+    "title": "Smart TV LG 55\"",
+    "description": "Televisor inteligente 4K con tecnología OLED.",
+    "price": 1299.99,
+    "img": "https://example.com/lg-oled55.jpg",
+    "code": 1226,
+    "stock": 7,
+    "estado": true,
+    "category": "electronica"
+  },
+  {
+    "title": "Tablet iPad Air",
+    "description": "Tablet de Apple con pantalla Liquid Retina de 10.9 pulgadas.",
+    "price": 599.99,
+    "img": "https://example.com/ipad-air.jpg",
+    "code": 1227,
+    "stock": 10,
+    "estado": true,
+    "category": "computacion"
+  },
+  {
+    "title": "Cámara Canon EOS R6",
+    "description": "Cámara sin espejo con sensor full-frame y grabación 4K.",
+    "price": 2499.99,
+    "img": "https://example.com/canon-eosr6.jpg",
+    "code": 1228,
+    "stock": 4,
+    "estado": true,
+    "category": "fotografia"
+  },
+  {
+    "title": "Consola PlayStation 5",
+    "description": "La última consola de Sony con gráficos 8K y SSD ultrarrápido.",
+    "price": 499.99,
+    "img": "https://example.com/ps5.jpg",
+    "code": 1229,
+    "stock": 20,
+    "estado": true,
+    "category": "videojuegos"
+  },
+  {
+    "title": "Reloj Apple Watch Series 6",
+    "description": "Reloj inteligente de Apple con monitor de oxígeno en sangre.",
+    "price": 399.99,
+    "img": "https://example.com/apple-watch6.jpg",
+    "code": 1230,
+    "stock": 25,
+    "estado": true,
+    "category": "accesorios"
+  },
+  {
+    "title": "Altavoz Bluetooth JBL Charge 4",
+    "description": "Altavoz portátil con sonido potente y batería de larga duración.",
+    "price": 149.99,
+    "img": "https://example.com/jbl-charge4.jpg",
+    "code": 1231,
+    "stock": 30,
+    "estado": true,
+    "category": "audio"
+  },
+  {
+    "title": "Monitor Dell UltraSharp 27\"",
+    "description": "Monitor de alta resolución con panel IPS y conectividad USB-C.",
+    "price": 699.99,
+    "img": "https://example.com/dell-ultrasharp.jpg",
+    "code": 1232,
+    "stock": 12,
+    "estado": true,
+    "category": "computacion"
+  }
+]

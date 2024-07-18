@@ -1,12 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const ProductManager = require(`../managers/productManager`)
-const productManager = new ProductManager("src/data/products.json")
+const ProductManager = require(`./managers/productManager`)
+const productManager = new ProductManager("src/dao/fs/json/products.json")
 
 // http://localhost:8080/
 router.get('/', async (req, res) => {
     const product = await productManager.getProducts()
     const products = JSON.parse(product);
+    console.log(product);
+    console.log( typeof products);
     res.render("home", {products})
 })
 
