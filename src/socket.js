@@ -27,7 +27,6 @@ io.on("connection", (socket)=>{
         const pid = data.pid
         console.log(cid);
         console.log(pid);
-        console.log("aaaaaaaaa"+data);
-        //await cartManager.addProductToCart(data)//{ product: { pid: '668b30dd5204a4ece4ba74f5', cid: '4' } }
+        await cartManager.addProductToCart(data)//{ product: { pid: '668b30dd5204a4ece4ba74f5', cid: '4' } }
     })
 })

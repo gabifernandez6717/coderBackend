@@ -4,6 +4,8 @@ const ProductManager = require("../manager/product.manager.js")
 const productManager = new ProductManager()
 
 //Rutas
+
+// http://localhost:8080/api/products/
 router.get("/", async (req, res)=>{
     const limit = req.query.limit
     const page = req.query.page
@@ -27,7 +29,9 @@ router.get("/", async (req, res)=>{
         console.log(error);
     }
 })
+
 //Obtener un product por su id
+// http://localhost:8080/api/products/668b30dd5204a4ece4ba74f5
 router.get("/:id", async (req, res)=>{
     const id = req.params.id
     if (id) {
@@ -58,6 +62,7 @@ router.get("/:id", async (req, res)=>{
 })
 
 //Subir un product
+// http://localhost:8080/api/products/
 router.post("/", async (req, res)=>{
     const product = req.body
     const addProduct = await productManager.addProduct(product)
@@ -72,6 +77,18 @@ router.post("/", async (req, res)=>{
         console.log(error);
     }
 })
+//EJ para req.body:
+// {
+//     "title": "producto ejemplo",
+//     "description": "descripcion de ejemplo",
+//     "price": 2499.99,
+//     "img": "https://example.com/canon-eosr6.jpg",
+//     "code": 122829378487,
+//     "stock": 4,
+//     "status": true,
+//     "category": "fotografia"
+// }
+
 //Actualizar un product
 router.put("/:id", async (req, res)=>{
     const id = req.params.id
@@ -88,7 +105,13 @@ router.put("/:id", async (req, res)=>{
         console.log(error);
     }
 })
+//EJ para req.body:
+// {
+//     "title": "ACTUALIZACION ejemplo"
+// }
+
 //Eliminar un product
+// http://localhost:8080/api/products/6699a4df07bcfbd345c0796d
 router.delete("/:id", async (req, res)=>{
     const id = req.params.id
     try {
@@ -103,4 +126,5 @@ router.delete("/:id", async (req, res)=>{
         console.log(error);
     }
 })
+
 module.exports = router

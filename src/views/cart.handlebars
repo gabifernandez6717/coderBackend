@@ -1,0 +1,17 @@
+{{!-- Muestra los productos agregados hasta el momento (al archivo products.json) --}}
+<div>
+    <h1>
+        Productos agregados al cart {{cartId}}:
+    </h1>
+    {{#each products}}
+        <div>
+            <div>
+                <h2>Id: {{this.productId}}</h2>
+            </div><br>
+            <h2>
+                Quantity: {{this.quantity}}
+            </h2><br>
+            <hr>
+        </div>
+    {{/each}}
+</div>

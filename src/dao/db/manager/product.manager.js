@@ -27,7 +27,7 @@ class ProductManager{
         try {
             const products = await ProductModel.paginate(
                 {...filter},
-                {limit: limit? limit: 5,page: page? page: 1, sort:{price: sort? Number(sort):-1}}
+                {limit: limit? limit: 10,page: page? page: 1, sort:{price: sort? Number(sort):-1}}
             )//sort: sort? sort: 1
             const results = {
                 ...products,
@@ -48,7 +48,7 @@ class ProductManager{
                     console.log(product);
                     return product
                 } else {
-                    return`Hubo un error al encontrar un producto con el id: ${id}.`
+                    return false
                 }
             } catch (error) {
                 console.log(error);
