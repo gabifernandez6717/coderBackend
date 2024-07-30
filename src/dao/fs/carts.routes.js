@@ -1,7 +1,7 @@
 
 const Router = require('express')
 const router = Router()
-const CartManager = require('../managers/cartManager')
+const CartManager = require('./managers/cartManager')
 const cartManager = new CartManager("src/data/carts.json")
 //Funciones para capturar algun error
 //Crear un cart

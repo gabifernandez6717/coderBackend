@@ -60,11 +60,9 @@ class ProductManager{
     }
     async addProduct (data){
         const send = data
-        console.log(send);
         try {
             if (send) {
                 const sendProduct = new ProductModel(send)
-                console.log(sendProduct);
                 await sendProduct.save()
                 return sendProduct
             } else {

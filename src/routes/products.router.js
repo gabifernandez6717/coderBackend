@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const ProductManager = require("../manager/product.manager.js")
+const ProductManager = require("../dao/db/manager/product.manager")
 const productManager = new ProductManager()
 
 //Rutas
@@ -14,18 +14,9 @@ router.get("/", async (req, res)=>{
     const sort = req.query.sort
     try {
         const products = await productManager.getProducts(limit,page,query,value,sort)
-        console.log(products);
-        res.status(200).render("home",{
-            products: products.docs,
-            currentPage: products.page,
-            totalPages: products.totalPages,
-            hasPrevPage: products.hasPrevPage,
-            hasNextPage: products.hasNextPage,
-            nextPage: products.nextPage,
-            prevPage: products.prevPage
-        })
+        res.status(200).json(products)
     } catch (error) {
-        res.status(500).send("error interno del servidor.")
+        res.status(500).json({error: "error interno del servidor."})
         console.log(error);
     }
 })
@@ -38,26 +29,17 @@ router.get("/:id", async (req, res)=>{
         try {
             const product = await productManager.getProductById(id)
             if (product) {
-                res.status(200).render("home",
-                {
-                    products: product.docs,
-                    currentPage: product.page,
-                    totalPages: product.totalPages,
-                    hasPrevPage: product.hasPrevPage,
-                    hasNextPage: product.hasNextPage,
-                    nextPage: product.nextPage,
-                    prevPage: product.prevPage
-                })
+                res.status(200).json(product)
             } else {
                 console.log(error);
-                res.status(500).send("Error interno del servidor")
+                res.status(500).json({error: "error interno del servidor."})
             }
         } catch (error) {
             console.log(error);
-            res.status(500).send("Error interno del servidor")
+            res.status(500).json({error: "error interno del servidor."})
         }
     } else {
-        res.status(404).send("debe proporcionar un id")
+        res.status(404).json({error: "debe proporcionar un id."})
     }
 })
 
@@ -68,12 +50,12 @@ router.post("/", async (req, res)=>{
     const addProduct = await productManager.addProduct(product)
     try {
         if (addProduct) {
-            res.status(200).send("Product agregado")
+            res.status(200).json(addProduct)
         } else {
-            res.status(400).send("No se proporcionó información.")
+            res.status(400).json({error: "No se proporcionó información valida."})
         }
     } catch (error) {
-        res.status(500).send("error interno del servidor.")
+        res.status(500).json({error: "error interno del servidor."})
         console.log(error);
     }
 })
@@ -96,13 +78,13 @@ router.put("/:id", async (req, res)=>{
     try {
         const product = await productManager.editedProduct(id, productUpdated)
         if (product) {
-            res.status(200).send("Product actualizado")
+            res.status(200).json(product)
         } else {
-            res.status(500).send("error interno del servidor.")
+            res.status(500).json({error: "error interno del servidor."})
         }
     } catch (error) {
-        res.status(500).send("error interno del servidor.")
         console.log(error);
+        res.status(500).json({error: "error interno del servidor."})
     }
 })
 //EJ para req.body:
@@ -117,12 +99,12 @@ router.delete("/:id", async (req, res)=>{
     try {
         const product = await productManager.deleteProduct(id)
         if (product) {
-            res.status(200).send("Product eliminado")
+            res.status(200).json(product)
         } else {
-            res.status(500).send("error interno del servidor.")
+            res.status(500).json({error: "error interno del servidor."})
         }
     } catch (error) {
-        res.status(500).send("error interno del servidor.")
+        res.status(500).json({error: "error interno del servidor."})
         console.log(error);
     }
 })

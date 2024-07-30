@@ -1,18 +1,20 @@
 const express = require('express')
 const path = require('path')
 const expressHandlebars = require('express-handlebars')
-const productRouter = require('./dao/fs/routesFileSystem/productss.router.js')
-const cartsRouter = require('./dao/db/routes/carts.router.js')
-const viewsRouter = require('./dao/fs/views.router.js')
-const productsRouter = require('./dao/db/routes/products.router.js')
+const productRouter = require('./dao/fs/productss.router.js')
+const cartsRouter = require('./routes/carts.router.js')
+const viewsRouter = require('./routes/views.router.js')
+const productsRouter = require('./routes/products.router.js')
 const CartManager = require('./dao/db/manager/cart.manager.js')
 const cartManager = new CartManager()
 const { Server } = require('socket.io')
 const mongoose = require('mongoose')
+const coockieParser = require("cookie-parser")
 const PORT = 8080
 const app = express()
 //Midlewares
 app.use(express.json())//Poder procesar datos JSON
+app.use(coockieParser())
 app.use(express.urlencoded({extended: true}))//Recibir info de req.body
 app.use('/public', express.static(path.join(__dirname, 'public')))//Config de la carpeta public
 
@@ -29,21 +31,13 @@ app.set('views', path.join(`${__dirname}/views`))
 app.use(express.static(__dirname + "/public"))
 
 //RUTAS
-//fs
-// //http://localhost:8080/api/products
-// app.use("/api/products", productRouter.router)
-// //http://localhost:8080/api/carts
-// app.use("/api/carts", cartsRouter)
-
-//chat
-//http://localhost:8080/chat
-app.use("/", viewsRouter)
-
-//db
 //http://localhost:8080/api/carts
 app.use("/api/carts", cartsRouter)
 //http://localhost:8080/products
 app.use("/api/products", productsRouter)
+//chat
+//http://localhost:8080/chat
+app.use("/", viewsRouter)
 
 const httpServer = app.listen(PORT, (req, res) => {
     console.log(`listening on:

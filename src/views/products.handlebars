@@ -1,7 +1,7 @@
 {{!-- Muestra los productos agregados hasta el momento --}}
 <div>
     <h1>
-        Productos:
+        Productos agregados a la DB:
     </h1>
     {{#each products}}
         <div>
@@ -32,7 +32,24 @@
             <h2>
                 category: {{this.category}}
             </h2><br>
+            <form id="addToCart">
+                <h3>Ingrese el id del producto</h3>
+                <input type="text" id="pid" name="id" required><br><br>
+                <h3>Ingrese el id del cart</h3>
+                <input type="text" id="cid" name="id" required><br><br>
+                <button type="submit" id="addToCart">Agregar producto</button>
+            </form>
             <hr>
         </div>
     {{/each}}
+    <H3>Página {{currentPage}} de {{totalPages}}</H3>
+    {{#if hasPrevPage}}
+    <a href="/api/products?page={{prevPage}}">Anterior</a>
+    {{/if}}
+    {{#if hasNextPage}}
+    <a href="/api/products?page={{nextPage}}">Siguiente</a>
+    {{/if}}
 </div>
+{{!-- <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script> --}}
+<script src="/socket.io/socket.io.js"></script> {{!-- Script para socket.io --}}
+<script src="../public/js/home.js"></script>
