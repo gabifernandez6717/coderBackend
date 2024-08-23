@@ -3,10 +3,11 @@ const router = express.Router()
 const ProductManager = require(`../dao/db/manager/product.manager`)
 const productManager = new ProductManager()
 const CartManager = require("../dao/db/manager/cart.manager")
+const { passportCall } = require('../utils/passportCall.js')
 const cartManager = new CartManager()
 
 // http://localhost:8080/
-router.get('/', async (req, res) => {
+router.get('/',passportCall("jwt"), async (req, res) => {
     const product = await productManager.getProducts()
     res.render("home", {products: product.docs})
 })
@@ -65,4 +66,42 @@ router.get('/realtimeproducts', async (req, res) => {
 router.get('/chat', async (req, res) => {
     res.render("chat")
 })
+
+
+//MODULO DOS
+
+//http://localhost:8080/login
+router.get("/login", (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/")
+    }
+    res.render("login")
+})
+
+//http://localhost:8080/logout
+router.get("/logout",passportCall("jwt"), async (req, res) => {
+    if (req.session.login) {
+        return req.session.destroy()
+    }
+    res.redirect("/login")
+})
+
+//http://localhost:8080/register
+router.get("/register", async (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/")
+    }
+    res.render("register")
+})
+
+//http://localhost:8080/profile
+router.get("/profile",passportCall("jwt"), (req, res) => {
+    if (!req.session.login) {
+        return res.redirect("/login")
+    }
+    const user =  req.session.user
+    res.render("profile", {user: user})
+})
+
+
 module.exports = router

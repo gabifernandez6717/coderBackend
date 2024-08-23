@@ -118,5 +118,21 @@ router.post("/", async (req, res) => {
         console.log(error);
     }
 })
-
+router.post("/:cid/product/:pid", async (req, res) => {
+    const cid = req.params.cid
+    const pid = req.params.pid
+    console.log("hasta aca bien: "+cid+pid);
+    try {
+        const cart = await cartManager.addProductToCart(cid, pid)
+        if (cart) {
+            console.log(`${pid} agregado correctamente ${cart}`)
+            res.status(200).json(cart)
+        } else {
+            res.status(500).json({error: "error interno del servidor."})
+        }
+    } catch (error) {
+        res.status(500).json({error: "error interno del servidor."})
+        console.log(error);
+    }
+})
 module.exports = router

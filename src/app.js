@@ -1,22 +1,50 @@
+//express
 const express = require('express')
-const path = require('path')
+const session = require("express-session")
 const expressHandlebars = require('express-handlebars')
+//Generales
+const path = require('path')
+const { Server } = require('socket.io')
+const mongoose = require('mongoose')
+//Passport
+const initialzePassport = require ("./config/passport.config.js")
+const passport = require("passport")
+//Coockies
+const coockieParser = require("cookie-parser")
+const claveCookies = "coderClave"
+const MongoStore = require("connect-mongo")
+//Routers
 const productRouter = require('./dao/fs/productss.router.js')
 const cartsRouter = require('./routes/carts.router.js')
 const viewsRouter = require('./routes/views.router.js')
 const productsRouter = require('./routes/products.router.js')
+const sessionsRouter = require("./routes/sessions.router.js")
+//Managers
 const CartManager = require('./dao/db/manager/cart.manager.js')
 const cartManager = new CartManager()
-const { Server } = require('socket.io')
-const mongoose = require('mongoose')
-const coockieParser = require("cookie-parser")
+//Servidor
 const PORT = 8080
 const app = express()
+
 //Midlewares
-app.use(express.json())//Poder procesar datos JSON
-app.use(coockieParser())
-app.use(express.urlencoded({extended: true}))//Recibir info de req.body
-app.use('/public', express.static(path.join(__dirname, 'public')))//Config de la carpeta public
+app.use(express.json())// Poder procesar datos JSON
+app.use(coockieParser(claveCookies))// Trabajar con cookies
+app.use(session({
+        secret: "secretCoder",
+        resave: true,
+        saveUninitialized: true,
+        store: MongoStore.create({
+            mongoUrl: "mongodb+srv://gabito2005usa:clustercoder@gabito2005usa.awcycim.mongodb.net/CoderBackend"
+        })
+    })
+)//Trabajar con sessions
+app.use(express.urlencoded({extended: true}))// Recibir info de req.body
+app.use('/public', express.static(path.join(__dirname, 'public')))// Config de la carpeta public
+
+//Passport
+initialzePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Handlebars
 app.engine("handlebars", expressHandlebars.engine({
@@ -33,10 +61,11 @@ app.use(express.static(__dirname + "/public"))
 //RUTAS
 //http://localhost:8080/api/carts
 app.use("/api/carts", cartsRouter)
-//http://localhost:8080/products
+//http://localhost:8080/api/products
 app.use("/api/products", productsRouter)
-//chat
-//http://localhost:8080/chat
+//http://localhost:8080/api/sessions
+app.use("/api/sessions", sessionsRouter)
+//http://localhost:8080/
 app.use("/", viewsRouter)
 
 const httpServer = app.listen(PORT, (req, res) => {
@@ -44,22 +73,25 @@ const httpServer = app.listen(PORT, (req, res) => {
         
         http://localhost:${PORT}/
         
+        http://localhost:${PORT}/login
+        
+        http://localhost:${PORT}/register
+        
+        http://localhost:${PORT}/profile
+        
         http://localhost:${PORT}/api/products
         
         http://localhost:${PORT}/api/carts/
         
-        http://localhost:${PORT}/chat
-        
         http://localhost:${PORT}/realtimeproducts
         `)
     })
-    
 module.exports= httpServer
-// //Chat
+
+//Chat
 const io = new Server(httpServer)
 let mensajes=[]
 io.on("connection", (socket)=>{
-    console.log("Un cliente se conectó");
     //Chat
     socket.on("mensaje", (data)=>{
         mensajes.push(data)
@@ -75,7 +107,6 @@ io.on("connection", (socket)=>{
     })
     socket.on("addProductToCart", async (data)=>{
         console.log(data);
-
         const cid = data.product.cid
         const pid = data.product.pid
         console.log(cid);
@@ -83,6 +114,7 @@ io.on("connection", (socket)=>{
         await cartManager.addProductToCart(cid, pid)
     })
 })
+
 //DB
 const environment= async () =>{
     mongoose.connect('mongodb+srv://gabito2005usa:clustercoder@gabito2005usa.awcycim.mongodb.net/CoderBackend')
