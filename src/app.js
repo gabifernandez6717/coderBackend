@@ -3,9 +3,9 @@ const express = require('express')
 const session = require("express-session")
 const expressHandlebars = require('express-handlebars')
 //Generales
+const cors = require('cors')
 const path = require('path')
 const { Server } = require('socket.io')
-const mongoose = require('mongoose')
 //Passport
 const initialzePassport = require ("./config/passport.config.js")
 const passport = require("passport")
@@ -25,7 +25,8 @@ const cartManager = new CartManager()
 //Servidor
 const PORT = 8080
 const app = express()
-
+//DB
+const Database = require("./config/db.js")
 //Midlewares
 app.use(express.json())// Poder procesar datos JSON
 app.use(coockieParser(claveCookies))// Trabajar con cookies
@@ -40,6 +41,7 @@ app.use(session({
 )//Trabajar con sessions
 app.use(express.urlencoded({extended: true}))// Recibir info de req.body
 app.use('/public', express.static(path.join(__dirname, 'public')))// Config de la carpeta public
+app.use(cors())
 
 //Passport
 initialzePassport()
@@ -116,9 +118,5 @@ io.on("connection", (socket)=>{
 })
 
 //DB
-const environment= async () =>{
-    mongoose.connect('mongodb+srv://gabito2005usa:clustercoder@gabito2005usa.awcycim.mongodb.net/CoderBackend')
-    .then(()=>{console.log("Conectado a la base de datos");})
-    .catch((err)=>{console.log(err);})
-}
+const environment = async () => {await Database.connect()}
 environment()

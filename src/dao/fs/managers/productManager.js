@@ -37,6 +37,32 @@ class ProductManager {
         }
     }
 
+    //Obtener productos
+    async getProducts (limit){
+        const respuesta = await this.leerArchivo()
+        if (!limit) {//Si no hay un limit muestra todos los productos
+            return respuesta
+            } else {
+                const productsParse = JSON.parse(respuesta)
+                const productsLimit = []
+                for (let index = 0; index < limit; index++) {
+                    productsLimit.push(productsParse[index])
+                }
+                return JSON.stringify(productsLimit, null, 2);
+            }
+        }
+
+    //Obtener productos por su id
+    async getProductsById (id) {
+        const productsJSON = await this.getProducts()//Obtiene los productos
+        const products = JSON.parse(productsJSON)
+        const product = products.find(product => product.id === id)
+        if (product) {
+            return JSON.stringify(product,null,2)
+        } else {
+            console.log("Not found");
+        }
+    }
     //Agregar productos
     async addProduct ({title, description, price, img, code, stock, status, category}){
         //validar que se agreguen todos los campos
@@ -68,51 +94,6 @@ class ProductManager {
             return
         }
     }
-
-    //Eiminar un producto por su id
-    async deleteProductById (id){
-        const existProduct = this.products.find(product=>product.id === id)
-        if (existProduct) {
-            const newProducts = this.products.filter(product => product.id != id)//Recupera todos los productos que no sean iguales al que queremos eliminar
-            if (newProducts) {
-                this.products = newProducts
-                await this.guardarArchivo()
-                console.log("Producto eliminado con exito");
-            } else {
-                console.log("Hubo un error al encontrar el producto");
-            }
-        } else {
-            console.log(`El producto con id ${id} no existe`);
-        }
-    }
-
-    //Obtener productos
-    async getProducts (limit){
-        const respuesta = await this.leerArchivo()
-        if (!limit) {//Si no hay un limit muestra todos los productos
-            return respuesta
-            } else {
-                const productsParse = JSON.parse(respuesta)
-                const productsLimit = []
-                for (let index = 0; index < limit; index++) {
-                    productsLimit.push(productsParse[index])
-                }
-                return JSON.stringify(productsLimit, null, 2);
-            }
-        }
-
-    //Obtener productos por su id
-    async getProductsById (id) {
-        const productsJSON = await this.getProducts()//Obtiene los productos
-        const products = JSON.parse(productsJSON)
-        const product = products.find(product => product.id === id)
-        if (product) {
-            return JSON.stringify(product,null,2)
-        } else {
-            console.log("Not found");
-        }
-    }
-
     //Editar un producto por su id
     async editedProductById (id, { title, description, price, img, code, stock }) {
         const productsJSON = await this.getProducts()//Obtiene los productos
@@ -138,6 +119,25 @@ class ProductManager {
             return
         }
     }
+    //Eiminar un producto por su id
+    async deleteProductById (id){
+        const existProduct = this.products.find(product=>product.id === id)
+        if (existProduct) {
+            const newProducts = this.products.filter(product => product.id != id)//Recupera todos los productos que no sean iguales al que queremos eliminar
+            if (newProducts) {
+                this.products = newProducts
+                await this.guardarArchivo()
+                console.log("Producto eliminado con exito");
+            } else {
+                console.log("Hubo un error al encontrar el producto");
+            }
+        } else {
+            console.log(`El producto con id ${id} no existe`);
+        }
+    }
+
+
+
 }
 
 module.exports = ProductManager
