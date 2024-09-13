@@ -23,9 +23,12 @@ class CartManager {
         }
     }
     //Actualizar un cart por su id
-    async updateCart (id, cartUpdated){
+    async updateCart (id, products){
         try {
-            const cart = await CartModel.findByIdAndUpdate(id,cartUpdated)
+            //const cart = await CartModel.findByIdAndUpdate(id, cartUpdated)
+            const cart = await CartModel.findById(id) //Se busca el cart por su id
+            cart.products = products
+            await cart.save()
             return cart
         } catch (error) {
             console.log(error);

@@ -1,5 +1,5 @@
 const fs = require('fs');
-class ProductManager {
+class ProductDAO {
     constructor(path){
         this.products = []//Array de productos
         this.path = path//Ruta del archivo
@@ -53,7 +53,7 @@ class ProductManager {
         }
 
     //Obtener productos por su id
-    async getProductsById (id) {
+    async getProductById (id) {
         const productsJSON = await this.getProducts()//Obtiene los productos
         const products = JSON.parse(productsJSON)
         const product = products.find(product => product.id === id)
@@ -95,7 +95,7 @@ class ProductManager {
         }
     }
     //Editar un producto por su id
-    async editedProductById (id, { title, description, price, img, code, stock }) {
+    async editedProduct (id, { title, description, price, img, code, stock }) {
         const productsJSON = await this.getProducts()//Obtiene los productos
         const products = JSON.parse(productsJSON)
         const productIndex = products.findIndex(product => product.id === id)// Busca el index del producto por su id
@@ -127,6 +127,7 @@ class ProductManager {
             if (newProducts) {
                 this.products = newProducts
                 await this.guardarArchivo()
+                console.log("Producto eliminado con exito");
             } else {
                 console.log("Hubo un error al encontrar el producto");
             }
@@ -139,4 +140,4 @@ class ProductManager {
 
 }
 
-module.exports = ProductManager
+module.exports = ProductDAO

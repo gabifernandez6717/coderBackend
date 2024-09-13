@@ -17,14 +17,11 @@ document.getElementById("productForm").addEventListener("submit", (e)=>{
         status: document.getElementById('status').checked,
         category: document.getElementById('category').value
     };
-    console.log(product);
     socket.emit('addproduct', product)
 })
 
 //Elimiinar un producto por su id
 document.getElementById("productDeleteForm").addEventListener("submit", (e)=>{
     const id = Number(document.getElementById('id').value)
-    console.log(id);
-    console.log(typeof id);
     socket.emit('deleteProductById', id)
 })

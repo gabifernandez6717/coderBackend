@@ -1,7 +1,7 @@
 const passport = require('passport')
 const passportCall = (strategy) =>{
     return async (req, res, next) =>{
-                passport.authenticate(strategy, (err, user, info)=>{
+        passport.authenticate(strategy, (err, user, info)=>{
             if (err) {
                 return next(err)
             }
@@ -17,7 +17,7 @@ const passportCall = (strategy) =>{
 
 const authorization = (role) => {
     return async (req, res, next) => {
-        if (req.user.user.role !== role) {
+        if (req.session.user.role !== role) {
             return res.status(403).send("no tenes permiso")
         }
         next()

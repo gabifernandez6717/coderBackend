@@ -1,5 +1,6 @@
-const ProductModel = require('../../models/products.model.js')
-class ProductManager{
+const ProductModel = require("../models/products.model");
+
+class ProductDAO {
     async getProducts (limit,page,query,value,sort){
         let filter ={}
         if (query){
@@ -31,29 +32,16 @@ class ProductManager{
                 prevLink: products.prevPage? `http://localhost:8080/products?page=${products.prevPage}`: null,
                 nextLink: products.nextPage? `http://localhost:8080/products?page=${products.nextPage}`: null
             }
+            console.log(results);
             return results
         } catch (error) {
             console.log(error);
         }
     }
-    async getAllProducts (){
-            try {
-                const products = await ProductModel.paginate({},{})
-                if (products) {
-                    return products
-                } else {
-                    return false
-                }
-            } catch (error) {
-                console.log(error);
-                return "error interno del servidor."
-            }
-    }
     async getProductById (id){
         if (id) {
             try {
-                //const product = await ProductModel.paginate({_id: id},{})
-                const product = await ProductModel.findOne({_id: id})
+                const product = await ProductModel.paginate({_id: id},{})
                 if (product) {
                     return product
                 } else {
@@ -86,6 +74,7 @@ class ProductManager{
             try {
                 const product = await ProductModel.findByIdAndUpdate(id, data)
                 if (product) {
+                    console.log(product);
                     return product
                 } else {
                     return"No se proporcionó un id valido."
@@ -98,7 +87,7 @@ class ProductManager{
             res.status(404).send("No se proporcionó un id.")
         }
     }
-    async deleteProduct (id){
+    async deleteProductById (id){
         if (id) {
             try {
                 const product = await ProductModel.findByIdAndDelete(id)
@@ -115,5 +104,6 @@ class ProductManager{
             return"No se proporcionó un id."
         }
     }
+
 }
-module.exports = ProductManager
+module.exports = ProductDAO

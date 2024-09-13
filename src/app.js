@@ -22,11 +22,13 @@ const sessionsRouter = require("./routes/sessions.router.js")
 //Managers
 const CartManager = require('./dao/db/manager/cart.manager.js')
 const cartManager = new CartManager()
-//Servidor
-const PORT = 8080
-const app = express()
+
 //DB
 const Database = require("./config/db.js")
+const config = require('./config/config.js')
+//Servidor
+const PORT = config.PORT
+const app = express()
 //Midlewares
 app.use(express.json())// Poder procesar datos JSON
 app.use(coockieParser(claveCookies))// Trabajar con cookies
@@ -100,19 +102,16 @@ io.on("connection", (socket)=>{
         socket.emit("mensajesLogs", mensajes)
     })
     //Real time products
-    socket.emit("clientConnection", "Cliente conectado!")
+    socket.emit("clientConnection", "Conexion exitosa")
     socket.on("addproduct", async (data)=>{
         await productRouter.addProduct(data)
     })
     socket.on("deleteProductById", async (data)=>{
-        await productRouter.deleteProductById(data)
+        await productRouter.deleteProductById(Number(data))
     })
     socket.on("addProductToCart", async (data)=>{
-        console.log(data);
         const cid = data.product.cid
         const pid = data.product.pid
-        console.log(cid);
-        console.log(pid);
         await cartManager.addProductToCart(cid, pid)
     })
 })

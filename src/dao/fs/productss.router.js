@@ -1,7 +1,8 @@
 const Router = require('express');
 const router = Router()
 const ProductManager = require(`./managers/productManager`)
-const productManager = new ProductManager("src/data/products.json")
+//const productManager = new ProductManager("src/data/products.json")
+const productManager = new ProductManager("./src/dao/fs/json/products.json")
 
 //Funciones para capturar algun error
 
@@ -9,7 +10,6 @@ const productManager = new ProductManager("src/data/products.json")
 async function getProducts(limit){
     try {
         const response = await productManager.getProducts(limit)
-        console.log(response)
         return response
     } catch (error) {
         console.error(error);
@@ -19,7 +19,6 @@ async function getProducts(limit){
 async function getProductsById (id){
     try {
         const response = await productManager.getProductsById(id)
-        console.log(response)
         return response
     } catch (error) {
         console.error(error);
@@ -29,7 +28,6 @@ async function getProductsById (id){
 async function addProduct({title, description, price, img, code, stock, status, category}){
     try {
         const response = await productManager.addProduct({title, description, price, img, code, stock, status, category})
-        console.log(response)
         return response
     } catch (error) {
         console.error(error);

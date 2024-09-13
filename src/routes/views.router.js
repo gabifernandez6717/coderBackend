@@ -3,22 +3,19 @@ const router = express.Router()
 const ProductManager = require(`../dao/db/manager/product.manager`)
 const productManager = new ProductManager()
 const CartManager = require("../dao/db/manager/cart.manager")
-const { passportCall } = require('../utils/passportCall.js')
 const cartManager = new CartManager()
+const { passportCall, authorization } = require('../utils/passportCall.js')
 
 // http://localhost:8080/
-router.get('/',passportCall("jwt"), async (req, res) => {
-    const product = await productManager.getProducts()
+router.get('/', passportCall("jwt"),authorization("user"), async (req, res) => {
+    const {limit,page,query,value,sort} = req.query
+    const product = await productManager.getProducts(limit,page,query,value,sort)
     res.render("home", {products: product.docs})
 })
 
 // http://localhost:8080/products
 router.get('/products', async (req, res) => {
-    const limit = req.query. limit
-    const page = req.query.page
-    const query = req.query.query
-    const value = req.query.value
-    const sort = req.query.sort
+    const {limit,page,query,value,sort} = req.query
     const products = await productManager.getProducts(limit, page, query, value, sort)
     res.render("products", {
         products: products.docs,
@@ -38,7 +35,6 @@ router.get('/carts/:cid', async (req, res) => {
         try {
             const cart = await cartManager.getCart(id)
             if (cart) {
-                console.log(cart)
                 res.status(200).render("cart", {
                     cartId: id,
                     products: cart.products
@@ -56,9 +52,9 @@ router.get('/carts/:cid', async (req, res) => {
 })
 
 // http://localhost:8080/realtimeproducts
-router.get('/realtimeproducts', async (req, res) => {
+router.get('/realtimeproducts', authorization("admin"), async (req, res) => {
     const product = await productManager.getProducts()
-    const products = JSON.parse(product);
+    const products = product.docs
     res.render("realTimeProducts", {products})
 })
 
@@ -66,7 +62,6 @@ router.get('/realtimeproducts', async (req, res) => {
 router.get('/chat', async (req, res) => {
     res.render("chat")
 })
-
 
 //MODULO DOS
 
@@ -79,9 +74,11 @@ router.get("/login", (req, res) => {
 })
 
 //http://localhost:8080/logout
-router.get("/logout",passportCall("jwt"), async (req, res) => {
+router.get("/logout",async (req, res) => {
     if (req.session.login) {
-        return req.session.destroy()
+        await req.user.destroy()
+        await req.session.destroy()
+        return
     }
     res.redirect("/login")
 })
@@ -102,6 +99,5 @@ router.get("/profile",passportCall("jwt"), (req, res) => {
     const user =  req.session.user
     res.render("profile", {user: user})
 })
-
 
 module.exports = router

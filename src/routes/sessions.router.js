@@ -6,7 +6,7 @@ const { passportCall, authorization } = require('../utils/passportCall.js')
 
 //Register
 router.post("/register", passport.authenticate("register", {
-    failureRedirect: "/api/sessions/failedregister"
+    failureRedirect: "/api/sessions/current"
 }),(req, res) => {
     try {
         req.session.user={
@@ -32,7 +32,13 @@ router.post("/register", passport.authenticate("register", {
 router.get("/admin", passportCall("jwt"), authorization("admin"), (req, res) => {req.user?res.status(200).send(req.user):res.status(401).send("No se encontro un usuario")})
 
 //Current
-router.get("/current", passportCall("jwt"), (req, res) => {req.user?res.status(200).send(req.user):res.status(401).send("No se encontro un usuario")})
+router.get("/current", passportCall("jwt"), (req, res) => {
+    if (req.user) {
+        res.status(200).send(req.user.user)
+    } else {
+        res.status(401).send("No se encontro un usuario")
+    }
+})
 
 //Login
 router.post("/login", passport.authenticate("login", {
@@ -52,10 +58,9 @@ router.post("/login", passport.authenticate("login", {
         const login = req.session.login
 
         const token = jwt.sign({user, login}, "coderClave", {expiresIn: "24h"})
-
         console.log("Token: "+ token);
-        res.cookie("authToken", token, {maxAge: 60*60*1000, httpOnly:true})
-        res.redirect("/")
+        res.cookie("authToken", token, {maxAge: 24*60*60*1000, httpOnly:true})
+        res.redirect("/profile")
     } catch (error) {
         console.log("hubo un error: " + error);
     }
@@ -70,12 +75,8 @@ router.get("/logout", (req, res) => {
     res.redirect("/login")
 })
 
-router.get("/failedregister", (req, res)=>{
-    res.send("registro fallido")
-})
-
 router.get("*", (req, res)=>{
-    res.status(404).send("recurso no encontrado")
+    res.status(404).send("parece que hubo un error")
 })
 
 

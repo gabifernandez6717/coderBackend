@@ -98,5 +98,27 @@
     "stock": 12,
     "estado": true,
     "category": "computacion"
+  },
+  {
+    "id": 11,
+    "title": "test",
+    "description": "test",
+    "price": 100,
+    "img": "test.com",
+    "code": 5326111,
+    "stock": 100,
+    "status": true,
+    "category": "test"
+  },
+  {
+    "id": 12,
+    "title": "test",
+    "description": "test",
+    "price": 1,
+    "img": "test.com",
+    "code": 32594776103645,
+    "stock": 10,
+    "status": true,
+    "category": "test"
   }
 ]
